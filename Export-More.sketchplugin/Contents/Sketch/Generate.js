@@ -156,7 +156,7 @@ function GenerateICNS(context) {
         return false
     }
 
-    var menuItems = [[NSArray alloc] initWithObjects:'Automatically','From Sequence']
+    var menuItems = ['Automatically','From Sequence']
     var menuPopup = [[NSPopUpButton alloc] initWithFrame:NSMakeRect(0,0,300,25)]
         menuPopup.addItemsWithTitles(menuItems)
 
@@ -198,24 +198,38 @@ function GenerateICNS(context) {
 
             [doc saveArtboardOrSlice:artboard toFile:pngPath]
 
-            var pngSize = [NSDictionary dictionaryWithObjectsAndKeys:
-                    @" 16 16 ",     @"icon_16x16.png",
-                    @" 32 32 ",     @"icon_16x16@2x.png",
-                    @" 32 32 ",     @"icon_32x32.png",
-                    @" 64 64 ",     @"icon_32x32@2x.png",
-                    @" 128 128 ",   @"icon_128x128.png",
-                    @" 256 256 ",   @"icon_128x128@2x.png",
-                    @" 256 256 ",   @"icon_256x256.png",
-                    @" 512 512 ",   @"icon_256x256@2x.png",
-                    @" 512 512 ",   @"icon_512x512.png",
-                    @" 1024 1024 ", @"icon_512x512@2x.png",
-                    nil]
-            var enumerator = [pngSize keyEnumerator]
-            var png = nil
 
-            while (png = [enumerator nextObject]) {
+            var sizes = [
+                " 16 16 ",
+                " 32 32 ",
+                " 32 32 ",
+                " 64 64 ",
+                " 128 128 ",
+                " 256 256 ",
+                " 256 256 ",
+                " 512 512 ",
+                " 512 512 ",
+                " 1024 1024 "
+            ];
+            var names = [
+                "icon_16x16.png",
+                "icon_16x16@2x.png",
+                "icon_32x32.png",
+                "icon_32x32@2x.png",
+                "icon_128x128.png",
+                "icon_128x128@2x.png",
+                "icon_256x256.png",
+                "icon_256x256@2x.png",
+                "icon_512x512.png",
+                "icon_512x512@2x.png"
+            ];
+
+            for (var i=0; i < sizes.length; i++) {
+                var size = sizes[i]
+                var name = names[i]
+
                 var convertTask = [[NSTask alloc] init]
-                var convertIcon  = "sips -z" + [pngSize valueForKey:png] + pngPath + " --out " + [iconsetPath stringByAppendingPathComponent:png]
+                var convertIcon  = "sips -z" + size + pngPath + " --out " + [iconsetPath stringByAppendingPathComponent:name]
 
                 [convertTask setLaunchPath:"/bin/bash"]
                 [convertTask setArguments:["-c", convertIcon]]
